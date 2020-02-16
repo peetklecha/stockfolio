@@ -1,15 +1,43 @@
-import React from 'react'
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {withRouter, Route, Switch} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {Login, Signup, UserHome} from './components'
+import {me} from './store'
 
-import {Navbar} from './components'
-import Routes from './routes'
+export default withRouter(
+  connect(
+    state => ({isLoggedIn: !!state.user.id}),
+    dispatch => ({loadInitialData: () => dispatch(me())})
+  )(
+    class App extends Component {
+      componentDidMount() {
+        this.props.loadInitialData()
+      }
 
-const App = () => {
-  return (
-    <div>
-      <Navbar />
-      <Routes />
-    </div>
+      render() {
+        const {isLoggedIn} = this.props
+
+        return (
+          <Switch>
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={Signup} />
+            {isLoggedIn && (
+              <Switch>
+                {/* Routes placed here are only available after logging in */}
+                <Route path="/home" component={UserHome} />
+              </Switch>
+            )}
+            {/* Displays our Login component as a fallback */}
+            <Route component={Login} />
+          </Switch>
+        )
+      }
+    }
   )
-}
+)
 
-export default App
+Routes.propTypes = {
+  loadInitialData: PropTypes.func.isRequired,
+  isLoggedIn: PropTypes.bool.isRequired
+}
