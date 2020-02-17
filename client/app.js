@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch} from 'react-router-dom'
-import PropTypes from 'prop-types'
+import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
 import {Login, Signup, UserHome} from './components'
 import {me} from './store'
 
@@ -24,8 +23,8 @@ export default withRouter(
             <Route path="/signup" component={Signup} />
             {isLoggedIn && (
               <Switch>
-                {/* Routes placed here are only available after logging in */}
                 <Route path="/home" component={UserHome} />
+                <Redirect to="home/portfolio" />
               </Switch>
             )}
             {/* Displays our Login component as a fallback */}
@@ -36,8 +35,3 @@ export default withRouter(
     }
   )
 )
-
-Routes.propTypes = {
-  loadInitialData: PropTypes.func.isRequired,
-  isLoggedIn: PropTypes.bool.isRequired
-}

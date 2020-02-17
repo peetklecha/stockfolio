@@ -1,35 +1,55 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import {Link} from 'react-router-dom'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import {auth} from '../store'
+import {SIGNIN_BUTTON, SIGNUP_BUTTON} from './constants'
 
-/**
- * COMPONENT
- */
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} name={name}>
-        <div>
-          <label htmlFor="email">
-            <small>Email</small>
-          </label>
-          <input name="email" type="text" />
-        </div>
-        <div>
-          <label htmlFor="password">
-            <small>Password</small>
-          </label>
-          <input name="password" type="password" />
-        </div>
-        <div>
-          <button type="submit">{displayName}</button>
-        </div>
-        {error && error.response && <div> {error.response.data} </div>}
-      </form>
-      <a href="/auth/google">{displayName} with Google</a>
+    <div id="form-page">
+      <h1>StockFolio</h1>
+      <div id="form-container">
+        <h2>{displayName}</h2>
+        <form onSubmit={handleSubmit} name={name} id="entry-form">
+          {displayName === SIGNUP_BUTTON && (
+            <TextField
+              id="name-field"
+              name="userName"
+              label="Name"
+              variant="outlined"
+            />
+          )}
+          <TextField
+            id="email-field"
+            name="email"
+            label="Email"
+            variant="outlined"
+          />
+          <TextField
+            id="password-field"
+            name="password"
+            label="Password"
+            variant="outlined"
+            type="password"
+          />
+          <div id="button-container">
+            <Button variant="contained" color="primary" type="submit">
+              {displayName}
+            </Button>
+            {displayName === SIGNIN_BUTTON && (
+              <Link to="/signup">
+                <Button variant="contained">{SIGNUP_BUTTON}</Button>
+              </Link>
+            )}
+          </div>
+          {error && error.response && <div> {error.response.data} </div>}
+        </form>
+      </div>
     </div>
   )
 }
@@ -37,7 +57,7 @@ const AuthForm = props => {
 const mapLogin = state => {
   return {
     name: 'login',
-    displayName: 'Login',
+    displayName: SIGNIN_BUTTON,
     error: state.user.error
   }
 }
@@ -45,7 +65,7 @@ const mapLogin = state => {
 const mapSignup = state => {
   return {
     name: 'signup',
-    displayName: 'Sign Up',
+    displayName: SIGNUP_BUTTON,
     error: state.user.error
   }
 }
@@ -57,7 +77,8 @@ const mapDispatch = dispatch => {
       const formName = evt.target.name
       const email = evt.target.email.value
       const password = evt.target.password.value
-      dispatch(auth(email, password, formName))
+      const name = evt.target.userName && evt.target.userName.value
+      dispatch(auth(email, password, formName, name))
     }
   }
 }
@@ -74,3 +95,12 @@ AuthForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   error: PropTypes.object
 }
+
+//
+//
+//<div>
+//<label htmlFor="email">
+//<small>Email</small>
+//</label>
+//<input name="email" type="text" />
+//</div>
