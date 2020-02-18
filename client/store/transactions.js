@@ -1,7 +1,8 @@
 import {
   GOT_TRANSACTIONS,
   GET_TRANSACTIONS_ERROR,
-  ADDED_TO_HISTORY
+  ADDED_TO_HISTORY,
+  REMOVE_USER
 } from './constants'
 
 const defaultTransactions = {
@@ -20,6 +21,8 @@ export default function(state = defaultTransactions, action) {
         ...state,
         transaction: [...state.transactions, action.transaction]
       }
+    case REMOVE_USER:
+      return defaultTransactions
     default:
       return state
   }

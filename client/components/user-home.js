@@ -19,17 +19,20 @@ export default connect(
   dispatch => ({
     getPortfolio: () => dispatch(getPortfolio()),
     getQuotes: () => dispatch(getQuotes()),
-    buyStock: (symbol, qty, price) => dispatch(buyStock(symbol, qty, price))
+    buyStock: (symbol, qty) => dispatch(buyStock(symbol, qty))
   })
 )(
   class UserHome extends Component {
     componentDidMount() {
+      console.log('MOUNTING')
       this.props.history.push('/home/portfolio')
       this.props.getPortfolio()
     }
 
     componentDidUpdate(prevProps) {
+      console.log('UPDATING')
       if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
+        console.log('>>DOING UPDATE')
         this.props.getQuotes()
         this.setIntervalId = setInterval(() => this.props.getQuotes(), 60000)
       }
@@ -39,9 +42,15 @@ export default connect(
       clearInterval(this.setIntervalId)
     }
 
-    handleSubmit() {}
+    handleSubmit(evt) {
+      evt.preventDefault()
+      const symbol = evt.target.symbol.value
+      const qty = evt.target.qty.value
+      this.props.buyStock(symbol, qty)
+    }
 
     render() {
+      console.log('RENDERING')
       const showConsole = this.props.location.pathname === '/home/portfolio'
       return (
         <div id="home-page">
@@ -59,7 +68,7 @@ export default connect(
                 <TextField
                   id="symbol-field"
                   name="symbol"
-                  label="symbol"
+                  label="Symbol"
                   variant="outlined"
                 />
                 <TextField

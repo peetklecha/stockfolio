@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
-import {auth} from '../store'
+import {auth} from '../store/actions'
 import {SIGNIN_BUTTON, SIGNUP_BUTTON} from './constants'
 
 const AuthForm = props => {

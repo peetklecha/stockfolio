@@ -4,7 +4,8 @@ import {
   GET_PORTFOLIO_ERROR,
   GOT_QUOTES,
   GET_QUOTES_ERROR,
-  BOUGHT_STOCK
+  BOUGHT_STOCK,
+  REMOVE_USER
 } from './constants'
 
 const defaultPortfolio = {
@@ -36,6 +37,8 @@ export default function(state = defaultPortfolio, action) {
       return {...state, portfolioError: true}
     case GET_QUOTES_ERROR:
       return {...state, quotesError: true}
+    case REMOVE_USER:
+      return defaultPortfolio
     default:
       return state
   }

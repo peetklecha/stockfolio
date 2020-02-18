@@ -3,7 +3,7 @@ import React from 'react'
 import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Button, ButtonGroup} from '@material-ui/core'
-import {logout} from '../store/user'
+import {logout} from '../store/actions'
 
 export default withRouter(
   connect(null, dispatch => ({doLogout: () => dispatch(logout())}))(

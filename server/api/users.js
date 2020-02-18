@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Stock, Transaction} = require('../db/models')
+const {Stock, Transaction, User} = require('../db/models')
 const {checkUser} = require('../utils')
 
 module.exports = router
@@ -17,8 +17,7 @@ router.get('/:id/portfolio', checkUser, async (req, res, next) => {
 
 router.post('/:id/portfolio', checkUser, async (req, res, next) => {
   try {
-    const {symbol, qty} = req.body
-    console.log(symbol, qty)
+    const {symbol, qty, price} = req.body
     const stock = await Stock.findOrCreate({
       where: {symbol, userId: req.params.id}
     })
@@ -26,8 +25,16 @@ router.post('/:id/portfolio', checkUser, async (req, res, next) => {
       const updatedStock = await stock[0].update({
         shares: stock[0].shares + qty
       })
-      if (updatedStock) res.json(updatedStock)
-    }
+      if (updatedStock) {
+        const user = await User.findByPk(req.params.id)
+        if (user) {
+          const updatedUser = user.update({cash: user.cash - qty * price})
+          if (updatedUser) {
+            res.json({stock: updatedStock, user: updatedUser})
+          } else throw new Error('Error updating user entry.')
+        } else throw new Error('Error finding user entry.')
+      } else throw new Error('Error updating stock entry.')
+    } else throw new Error('Error finding/creating stock entry.')
   } catch (error) {
     next(error)
   }

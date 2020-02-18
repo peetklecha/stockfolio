@@ -3,7 +3,7 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PortfolioEntry from './portfolio-entry'
 import {List} from '@material-ui/core'
-import {getTransactions} from '../store/transactions'
+import {getTransactions} from '../store/actions'
 
 export default connect(
   state => ({
