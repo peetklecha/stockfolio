@@ -21,7 +21,7 @@ export default connect(
 
     render() {
       return (
-        <div id="transaction-page">
+        <div id="list-page">
           <h1>Transactions</h1>
           <div id="transaction-main">
             <List id="transaction-container">

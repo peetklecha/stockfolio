@@ -47,7 +47,7 @@ export default connect(
 
     render() {
       return (
-        <div id="portfolio-page">
+        <div id="list-page">
           <h1>{`Portfolio ($${this.getPortfolioValue()})`}</h1>
           <List id="portfolio-container">
             {this.props.portfolio.map(stock => (

@@ -65,17 +65,13 @@ a > button {
   width: 30%;
 }
 
-#portfolio-page {
+#list-page {
   padding: 5vw;
-}
-
-#transaction-page {
-  padding: 5vw;
+  padding-top: 0vw;
   align-self: flex-start;
 }
 
-#portfolio-main,
-#transaction-main {
+#list-container {
   display: flex;
 }
 
@@ -84,11 +80,16 @@ a > button {
   border-right: solid 2px black;
 }
 
-#console {
+.console {
   width: 40vw;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+}
+
+.hide {
+  opacity: 0;
 }
 
 .list-item {
@@ -108,4 +109,9 @@ a > button {
 #transaction-container {
   align-self: flex-start;
   width: 50vw;
+}
+
+#home-page {
+  display: flex;
+  flex-direction: row;
 }

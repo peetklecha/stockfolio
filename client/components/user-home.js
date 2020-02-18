@@ -40,11 +40,12 @@ export default connect(state => ({
     handleSubmit() {}
 
     render() {
+      const showConsole = this.props.location.pathname === '/home/portfolio'
       return (
-        <div id="portfolio-page">
+        <div id="home-page">
           <Route path="/home/portfolio" component={Portfolio} />
           <Route path="/home/transactions" component={Transactions} />
-          <div id="console">
+          <div className={showConsole ? 'console' : 'console hide'}>
             <h3>{`Cash - $${(this.props.cash / 10000).toFixed(2)}`}</h3>
             <form
               onSubmit={this.handleSubmit.bind(this)}
