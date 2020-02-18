@@ -41,8 +41,8 @@ export default connect(
           <List id="portfolio-container">
             {this.props.portfolio.map(stock => (
               <PortfolioEntry
-                key={stock.ticker}
-                ticker={stock.ticker}
+                key={stock.symbol}
+                symbol={stock.symbol}
                 shares={stock.shares}
                 value={
                   stock.latestPrice

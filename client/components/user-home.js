@@ -5,20 +5,21 @@ import {TextField, Button} from '@material-ui/core'
 import Portfolio from './portfolio'
 import Transactions from './transactions'
 import NavBar from './navbar'
-import {getPortfolio, getQuotes} from '../store/portfolio'
+import {getPortfolio, getQuotes, buyStock} from '../store/actions'
 
 export default connect(
   state => ({
     cash: state.user.cash,
     name: state.user.name,
     portfolio: state.portfolio.stocks,
-    portfolioError: state.portfolio.error,
+    portfolioError: state.portfolio.portfolioError,
     portfolioLoaded: state.portfolio.loaded,
-    quotes: state.quotes
+    quotesError: state.portfolio.quotesError
   }),
   dispatch => ({
     getPortfolio: () => dispatch(getPortfolio()),
-    getQuotes: () => dispatch(getQuotes())
+    getQuotes: () => dispatch(getQuotes()),
+    buyStock: (symbol, qty, price) => dispatch(buyStock(symbol, qty, price))
   })
 )(
   class UserHome extends Component {
@@ -28,9 +29,7 @@ export default connect(
     }
 
     componentDidUpdate(prevProps) {
-      console.log('the component did indeed update')
       if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
-        console.log('portfolio has loaded. get those quotes')
         this.props.getQuotes()
         this.setIntervalId = setInterval(() => this.props.getQuotes(), 60000)
       }
@@ -58,9 +57,9 @@ export default connect(
                 id="buy-form"
               >
                 <TextField
-                  id="ticker-field"
-                  name="ticker"
-                  label="Ticker"
+                  id="symbol-field"
+                  name="symbol"
+                  label="symbol"
                   variant="outlined"
                 />
                 <TextField

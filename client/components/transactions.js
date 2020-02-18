@@ -27,8 +27,8 @@ export default connect(
             <List id="transaction-container">
               {this.props.purchaseHistory.transactions.map(transaction => (
                 <PortfolioEntry
-                  key={transaction.ticker}
-                  ticker={transaction.ticker}
+                  key={transaction.symbol}
+                  symbol={transaction.symbol}
                   shares={transaction.shares}
                   value={(transaction.price / 10000).toFixed(2)}
                 />

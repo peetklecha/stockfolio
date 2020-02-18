@@ -23,22 +23,22 @@ async function seed() {
 
   const stocks = await Promise.all([
     Stock.create({
-      ticker: 'AAPL',
+      symbol: 'AAPL',
       shares: 6,
       userId: 1
     }),
     Stock.create({
-      ticker: 'STWD',
+      symbol: 'STWD',
       shares: 40,
       userId: 1
     }),
     Stock.create({
-      ticker: 'NFLX',
+      symbol: 'NFLX',
       shares: 86,
       userId: 1
     }),
     Stock.create({
-      ticker: 'MSFT',
+      symbol: 'MSFT',
       shares: 10,
       userId: 2
     })
@@ -47,13 +47,13 @@ async function seed() {
 
   const transax = await Promise.all([
     Transaction.create({
-      ticker: 'AAPL',
+      symbol: 'AAPL',
       shares: 6,
       price: 3000000,
       userId: 1
     }),
     Transaction.create({
-      ticker: 'STWD',
+      symbol: 'STWD',
       shares: 40,
       price: 205600,
       userId: 1

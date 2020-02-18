@@ -2,14 +2,13 @@ const Sequelize = require('sequelize')
 const db = require('../db')
 
 const Stock = db.define('stock', {
-  ticker: {
+  symbol: {
     type: Sequelize.STRING,
     allowNull: false
   },
   shares: {
     type: Sequelize.INTEGER,
-    unique: true,
-    allowNull: false
+    defaultValue: 0
   }
 })
 
