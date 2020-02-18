@@ -10,39 +10,28 @@ export default connect(
     email: state.user.email,
     name: state.user.name,
     portfolio: state.portfolio.stocks,
-    portfolioError: state.portfolio.error
+    portfolioError: state.portfolio.error,
+    portfolioLoaded: state.portfolio.loaded
   }),
   dispatch => ({
     getPortfolio: () => dispatch(getPortfolio())
   })
 )(
   class Portfolio extends Component {
-    constructor(props) {
-      super(props)
-      this.state = {
-        stockValues: {
-          AAPL: '300.0000',
-          STWD: '20.5613',
-          NFLX: '47.4747'
-        }
-      }
-    }
-
-    componentDidMount() {
-      if (!this.props.portfolio.length) this.props.getPortfolio()
-    }
-
     getPortfolioValue() {
       if (!this.props.portfolio.length) return '0.00'
-      return this.props.portfolio
-        .map(
-          stock =>
-            stock.shares *
-            Number.parseFloat(this.state.stockValues[stock.ticker])
-        )
-        .reduce((x, y) => x + y)
-        .toFixed(2)
-        .toString()
+      const stocksWithQuotes = this.props.portfolio.filter(
+        stock => stock.latestPrice
+      )
+      const tail =
+        stocksWithQuotes.length < this.props.portfolio.length ? '...' : ''
+      return (
+        stocksWithQuotes
+          .map(stock => stock.shares * Number.parseFloat(stock.latestPrice))
+          .reduce((x, y) => x + y, 0)
+          .toFixed(2)
+          .toString() + tail
+      )
     }
 
     render() {
@@ -55,9 +44,11 @@ export default connect(
                 key={stock.ticker}
                 ticker={stock.ticker}
                 shares={stock.shares}
-                value={Number.parseFloat(
-                  this.state.stockValues[stock.ticker]
-                ).toFixed(2)}
+                value={
+                  stock.latestPrice
+                    ? Number.parseFloat(stock.latestPrice).toFixed(2)
+                    : '...'
+                }
               />
             ))}
           </List>

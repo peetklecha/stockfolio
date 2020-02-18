@@ -5,41 +5,39 @@ import {TextField, Button} from '@material-ui/core'
 import Portfolio from './portfolio'
 import Transactions from './transactions'
 import NavBar from './navbar'
+import {getPortfolio, getQuotes} from '../store/portfolio'
 
-export default connect(state => ({
-  cash: state.user.cash,
-  email: state.user.email,
-  name: state.user.name,
-  portfolio: state.portfolio.stocks,
-  portfolioError: state.portfolio.error
-}))(
+export default connect(
+  state => ({
+    cash: state.user.cash,
+    name: state.user.name,
+    portfolio: state.portfolio.stocks,
+    portfolioError: state.portfolio.error,
+    portfolioLoaded: state.portfolio.loaded,
+    quotes: state.quotes
+  }),
+  dispatch => ({
+    getPortfolio: () => dispatch(getPortfolio()),
+    getQuotes: () => dispatch(getQuotes())
+  })
+)(
   class UserHome extends Component {
-    constructor(props) {
-      super(props)
-      this.state = {
-        stockValues: {
-          AAPL: '300.0000',
-          STWD: '20.5613',
-          NFLX: '47.4747'
-        }
+    componentDidMount() {
+      this.props.history.push('/home/portfolio')
+      this.props.getPortfolio()
+    }
+
+    componentDidUpdate(prevProps) {
+      console.log('the component did indeed update')
+      if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
+        console.log('portfolio has loaded. get those quotes')
+        this.props.getQuotes()
+        this.setIntervalId = setInterval(() => this.props.getQuotes(), 60000)
       }
     }
 
-    componentDidMount() {
-      this.props.history.push('/home/portfolio')
-    }
-
-    getPortfolioValue() {
-      if (!this.props.portfolio.length) return '0.00'
-      return this.props.portfolio
-        .map(
-          stock =>
-            stock.shares *
-            Number.parseFloat(this.state.stockValues[stock.ticker])
-        )
-        .reduce((x, y) => x + y)
-        .toFixed(2)
-        .toString()
+    componentWillUnmount() {
+      clearInterval(this.setIntervalId)
     }
 
     handleSubmit() {}
