@@ -97,13 +97,10 @@ a > button {
 }
 
 #nav-container {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.MuiButtonGroup-root {
+  margin-left: 10px;
   margin-right: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 #transaction-container {
@@ -111,7 +108,7 @@ a > button {
   width: 50vw;
 }
 
-#home-page {
+#main-container {
   display: flex;
   flex-direction: row;
 }

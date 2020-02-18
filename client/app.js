@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
+import {withRouter, Route, Switch} from 'react-router-dom'
 import {Login, Signup, UserHome} from './components'
 import {me} from './store'
 
@@ -10,24 +10,29 @@ export default withRouter(
     dispatch => ({loadInitialData: () => dispatch(me())})
   )(
     class App extends Component {
+      constructor() {
+        super()
+        this.state = {
+          loaded: false
+        }
+      }
+
       componentDidMount() {
         this.props.loadInitialData()
       }
 
+      componentDidUpdate() {
+        if (!this.state.loaded) this.setState({loaded: true})
+      }
+
       render() {
         const {isLoggedIn} = this.props
-
+        if (!this.state.loaded) return ''
         return (
           <Switch>
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
-            {isLoggedIn && (
-              <Switch>
-                <Route path="/home" component={UserHome} />
-                <Redirect to="home/portfolio" />
-              </Switch>
-            )}
-            {/* Displays our Login component as a fallback */}
+            {isLoggedIn && <Route component={UserHome} />}
             <Route component={Login} />
           </Switch>
         )

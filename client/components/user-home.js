@@ -4,6 +4,7 @@ import {Route} from 'react-router-dom'
 import {TextField, Button} from '@material-ui/core'
 import Portfolio from './portfolio'
 import Transactions from './transactions'
+import NavBar from './navbar'
 
 export default connect(state => ({
   cash: state.user.cash,
@@ -22,6 +23,10 @@ export default connect(state => ({
           NFLX: '47.4747'
         }
       }
+    }
+
+    componentDidMount() {
+      this.props.history.push('/home/portfolio')
     }
 
     getPortfolioValue() {
@@ -43,31 +48,34 @@ export default connect(state => ({
       const showConsole = this.props.location.pathname === '/home/portfolio'
       return (
         <div id="home-page">
-          <Route path="/home/portfolio" component={Portfolio} />
-          <Route path="/home/transactions" component={Transactions} />
-          <div className={showConsole ? 'console' : 'console hide'}>
-            <h3>{`Cash - $${(this.props.cash / 10000).toFixed(2)}`}</h3>
-            <form
-              onSubmit={this.handleSubmit.bind(this)}
-              name="buy"
-              id="buy-form"
-            >
-              <TextField
-                id="ticker-field"
-                name="ticker"
-                label="Ticker"
-                variant="outlined"
-              />
-              <TextField
-                id="qty-field"
-                name="qty"
-                label="Qty"
-                variant="outlined"
-              />
-              <Button variant="contained" color="primary" type="submit">
-                Buy
-              </Button>
-            </form>
+          <NavBar />
+          <div id="main-container">
+            <Route path="/home/portfolio" component={Portfolio} />
+            <Route path="/home/transactions" component={Transactions} />
+            <div className={showConsole ? 'console' : 'console hide'}>
+              <h3>{`Cash - $${(this.props.cash / 10000).toFixed(2)}`}</h3>
+              <form
+                onSubmit={this.handleSubmit.bind(this)}
+                name="buy"
+                id="buy-form"
+              >
+                <TextField
+                  id="ticker-field"
+                  name="ticker"
+                  label="Ticker"
+                  variant="outlined"
+                />
+                <TextField
+                  id="qty-field"
+                  name="qty"
+                  label="Qty"
+                  variant="outlined"
+                />
+                <Button variant="contained" color="primary" type="submit">
+                  Buy
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       )

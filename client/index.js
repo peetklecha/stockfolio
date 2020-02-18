@@ -5,12 +5,10 @@ import {Router} from 'react-router-dom'
 import history from './history'
 import store from './store'
 import App from './app'
-import {NavBar} from './components'
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
-      <NavBar />
       <App />
     </Router>
   </Provider>,
