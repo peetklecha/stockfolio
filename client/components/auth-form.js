@@ -14,8 +14,7 @@ import {
 } from './constants'
 
 const AuthForm = props => {
-  const {name, displayName, handleSubmit, error} = props
-
+  const {name, displayName, handleSubmit} = props
   return (
     <div id="form-page">
       <h1>StockFolio</h1>
@@ -53,26 +52,23 @@ const AuthForm = props => {
               </Link>
             )}
           </div>
-          {/* {error && error.response && <div> {error.response.data} </div>} */}
         </form>
       </div>
     </div>
   )
 }
 
-const mapLogin = state => {
+const mapLogin = _ => {
   return {
     name: 'login',
-    displayName: SIGNIN_BUTTON,
-    error: state.user.error
+    displayName: SIGNIN_BUTTON
   }
 }
 
-const mapSignup = state => {
+const mapSignup = _ => {
   return {
     name: 'signup',
-    displayName: SIGNUP_BUTTON,
-    error: state.user.error
+    displayName: SIGNUP_BUTTON
   }
 }
 
@@ -98,15 +94,5 @@ export const Signup = connect(mapSignup, mapDispatch)(AuthForm)
 AuthForm.propTypes = {
   name: PropTypes.string.isRequired,
   displayName: PropTypes.string.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  error: PropTypes.object
+  handleSubmit: PropTypes.func.isRequired
 }
-
-//
-//
-//<div>
-//<label htmlFor="email">
-//<small>Email</small>
-//</label>
-//<input name="email" type="text" />
-//</div>

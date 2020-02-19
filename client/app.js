@@ -15,20 +15,9 @@ export default withRouter(
     dispatch => ({loadInitialData: () => dispatch(me())})
   )(
     class App extends Component {
-      // constructor() {
-      //   super()
-      //   this.state = {
-      //     loaded: false
-      //   }
-      // }
-
       componentDidMount() {
         this.props.loadInitialData()
       }
-
-      // componentDidUpdate() {
-      //   if (!this.state.loaded) this.setState({loaded: true})
-      // }
 
       render() {
         const {isLoggedIn, checkedForUser, error} = this.props

@@ -21,22 +21,14 @@ router.post('/:id/portfolio', checkUser, async (req, res, next) => {
     const stock = await Stock.findOrCreate({
       where: {symbol, userId: req.params.id}
     })
-    if (stock) {
-      const updatedStock = await stock[0].update({
-        shares: +stock[0].shares + +qty
-      })
-      if (updatedStock) {
-        const user = await User.findByPk(req.params.id)
-        if (user) {
-          const updatedUser = await user.update({
-            cash: user.cash - +qty * +price
-          })
-          if (updatedUser) {
-            res.json({stock: updatedStock, user: updatedUser})
-          } else throw new Error('Error updating user entry.')
-        } else throw new Error('Error finding user entry.')
-      } else throw new Error('Error updating stock entry.')
-    } else throw new Error('Error finding/creating stock entry.')
+    const updatedStock = await stock[0].update({
+      shares: +stock[0].shares + +qty
+    })
+    const user = await User.findByPk(req.params.id)
+    const updatedUser = await user.update({
+      cash: user.cash - +qty * +price
+    })
+    res.json({stock: updatedStock, user: updatedUser})
   } catch (error) {
     next(error)
   }
@@ -62,7 +54,7 @@ router.post('/:id/history', checkUser, async (req, res, next) => {
       price,
       userId: req.params.id
     })
-    if (transaction) res.json(transaction)
+    res.json(transaction)
   } catch (error) {
     next(error)
   }
