@@ -27,7 +27,8 @@ export default function(state = defaultPortfolio, action) {
         stocks: state.stocks.map(stock => ({
           ...stock,
           latestPrice: action.quotes[stock.symbol].quote.latestPrice,
-          latestTime: action.quotes[stock.symbol].quote.latestTime
+          latestTime: action.quotes[stock.symbol].quote.latestTime,
+          open: action.quotes[stock.symbol].quote.open
         }))
       }
     case BOUGHT_STOCK:

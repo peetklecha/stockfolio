@@ -112,3 +112,11 @@ a > button {
   display: flex;
   flex-direction: row;
 }
+
+.up {
+  background-color: #bdffd5;
+}
+
+.down {
+  background-color: #ffbdbd;
+}

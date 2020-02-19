@@ -43,6 +43,11 @@ export default connect(
                 key={stock.symbol}
                 symbol={stock.symbol}
                 shares={stock.shares}
+                status={
+                  stock.latestPrice > stock.open
+                    ? 'up'
+                    : stock.latestPrice < stock.open && 'down'
+                }
                 value={
                   stock.latestPrice
                     ? Number.parseFloat(stock.latestPrice).toFixed(2)
