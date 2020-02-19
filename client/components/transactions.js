@@ -3,21 +3,15 @@ import React from 'react'
 import {connect} from 'react-redux'
 import PortfolioEntry from './portfolio-entry'
 import {List} from '@material-ui/core'
-import {getTransactions} from '../store/actions'
 
-export default connect(
-  state => ({
-    purchaseHistory: state.history
-  }),
-  dispatch => ({
-    getTransactions: () => dispatch(getTransactions())
-  })
-)(
+export default connect(state => ({
+  purchaseHistory: state.history
+}))(
   class Transactions extends React.Component {
-    componentDidMount() {
-      if (!this.props.purchaseHistory.transactions.length)
-        this.props.getTransactions()
-    }
+    // componentDidMount() {
+    //   if (!this.props.purchaseHistory.transactions.length)
+    //     this.props.getTransactions()
+    // }
 
     render() {
       return (
@@ -27,7 +21,7 @@ export default connect(
             <List id="transaction-container">
               {this.props.purchaseHistory.transactions.map(transaction => (
                 <PortfolioEntry
-                  key={transaction.symbol}
+                  key={transaction.symbol + transaction.createdAt}
                   symbol={transaction.symbol}
                   shares={transaction.shares}
                   value={(transaction.price / 10000).toFixed(2)}

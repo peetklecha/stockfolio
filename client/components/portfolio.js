@@ -10,7 +10,6 @@ export default connect(
     email: state.user.email,
     name: state.user.name,
     portfolio: state.portfolio.stocks,
-    portfolioError: state.portfolio.error,
     portfolioLoaded: state.portfolio.loaded
   }),
   dispatch => ({

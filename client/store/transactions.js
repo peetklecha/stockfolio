@@ -2,11 +2,13 @@ import {
   GOT_TRANSACTIONS,
   GET_TRANSACTIONS_ERROR,
   ADDED_TO_HISTORY,
-  REMOVE_USER
+  REMOVE_USER,
+  ADD_TO_HISTORY_ERROR
 } from './constants'
 
 const defaultTransactions = {
-  error: false,
+  getError: false,
+  addError: false,
   transactions: []
 }
 
@@ -15,12 +17,14 @@ export default function(state = defaultTransactions, action) {
     case GOT_TRANSACTIONS:
       return {...state, transactions: action.transactions}
     case GET_TRANSACTIONS_ERROR:
-      return {...state, error: true}
+      return {...state, getError: true}
     case ADDED_TO_HISTORY:
       return {
         ...state,
         transaction: [...state.transactions, action.transaction]
       }
+    case ADD_TO_HISTORY_ERROR:
+      return {...state, addError: true}
     case REMOVE_USER:
       return defaultTransactions
     default:

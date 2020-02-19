@@ -5,34 +5,37 @@ import {TextField, Button} from '@material-ui/core'
 import Portfolio from './portfolio'
 import Transactions from './transactions'
 import NavBar from './navbar'
-import {getPortfolio, getQuotes, buyStock} from '../store/actions'
+import MessageCenter from './message-center'
+import {
+  getPortfolio,
+  getQuotes,
+  buyStock,
+  getTransactions
+} from '../store/actions'
 
 export default connect(
   state => ({
     cash: state.user.cash,
     name: state.user.name,
     portfolio: state.portfolio.stocks,
-    portfolioError: state.portfolio.portfolioError,
-    portfolioLoaded: state.portfolio.loaded,
-    quotesError: state.portfolio.quotesError
+    portfolioLoaded: state.portfolio.loaded
   }),
   dispatch => ({
     getPortfolio: () => dispatch(getPortfolio()),
     getQuotes: () => dispatch(getQuotes()),
-    buyStock: (symbol, qty) => dispatch(buyStock(symbol, qty))
+    buyStock: (symbol, qty) => dispatch(buyStock(symbol, qty)),
+    getTransactions: () => dispatch(getTransactions())
   })
 )(
   class UserHome extends Component {
     componentDidMount() {
-      console.log('MOUNTING')
       this.props.history.push('/home/portfolio')
       this.props.getPortfolio()
+      this.props.getTransactions()
     }
 
     componentDidUpdate(prevProps) {
-      console.log('UPDATING')
       if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
-        console.log('>>DOING UPDATE')
         this.props.getQuotes()
         this.setIntervalId = setInterval(() => this.props.getQuotes(), 60000)
       }
@@ -83,6 +86,7 @@ export default connect(
               </form>
             </div>
           </div>
+          <MessageCenter />
         </div>
       )
     }
