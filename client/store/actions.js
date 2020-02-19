@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {IEX_API_KEY} from '../../secrets'
-import {centipennies} from '../utils'
+import {centipennies, dollars} from '../utils'
 import {
   GOT_PORTFOLIO,
   GET_QUOTES_ERROR,
@@ -51,24 +51,20 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
   } catch (error) {
     dispatch(getQuotesError())
   }
+  const req = {symbol, qty, price}
   if (price) {
     try {
-      res = await axios.post(`/api/users/${id}/portfolio/`, {
-        symbol,
-        qty,
-        price
-      })
-      if (res) dispatch(boughtStock(res.data.stock, qty, res.data.user.cash))
+      res = await axios.post(`/api/users/${id}/portfolio/`, req)
+      const finalStock = res.data.stock
+      finalStock.latestPrice = dollars(price)
+      const cash = +res.data.user.cash
+      if (res) dispatch(boughtStock(finalStock, qty, cash))
     } catch (error) {
       dispatch(buyStockError())
     }
     if (res) {
       try {
-        const newRes = await axios.post(`/api/users/${id}/history`, {
-          symbol,
-          qty,
-          price
-        })
+        const newRes = await axios.post(`/api/users/${id}/history`, req)
         if (newRes) dispatch(addedToHistory(newRes.data))
       } catch (error) {
         dispatch(addToHistoryError())

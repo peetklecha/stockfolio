@@ -28,6 +28,14 @@ export default connect(
   })
 )(
   class UserHome extends Component {
+    constructor(props) {
+      super(props)
+      this.state = {
+        symbol: '',
+        qty: ''
+      }
+    }
+
     componentDidMount() {
       this.props.history.push('/home/portfolio')
       this.props.getPortfolio()
@@ -50,6 +58,11 @@ export default connect(
       const symbol = evt.target.symbol.value
       const qty = evt.target.qty.value
       this.props.buyStock(symbol, qty)
+      this.setState({symbol: '', qty: ''})
+    }
+
+    handleChange(evt) {
+      this.setState({[evt.target.name]: evt.target.value})
     }
 
     render() {
@@ -73,12 +86,16 @@ export default connect(
                   name="symbol"
                   label="Symbol"
                   variant="outlined"
+                  onChange={this.handleChange.bind(this)}
+                  value={this.state.symbol}
                 />
                 <TextField
                   id="qty-field"
                   name="qty"
                   label="Qty"
                   variant="outlined"
+                  onChange={this.handleChange.bind(this)}
+                  value={this.state.qty}
                 />
                 <Button variant="contained" color="primary" type="submit">
                   Buy

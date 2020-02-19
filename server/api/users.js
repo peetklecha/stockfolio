@@ -23,12 +23,14 @@ router.post('/:id/portfolio', checkUser, async (req, res, next) => {
     })
     if (stock) {
       const updatedStock = await stock[0].update({
-        shares: stock[0].shares + qty
+        shares: +stock[0].shares + +qty
       })
       if (updatedStock) {
         const user = await User.findByPk(req.params.id)
         if (user) {
-          const updatedUser = user.update({cash: user.cash - qty * price})
+          const updatedUser = await user.update({
+            cash: user.cash - +qty * +price
+          })
           if (updatedUser) {
             res.json({stock: updatedStock, user: updatedUser})
           } else throw new Error('Error updating user entry.')
