@@ -81,7 +81,7 @@ export const getQuotes = () => async (dispatch, getState) => {
     const quotes = await axios.get(`/api/quotes/user/${id}`)
     dispatch(gotQuotes(quotes.data))
   } catch (err) {
-    dispatch(getQuotesError())
+    dispatch(getQuotesError(err.response))
   }
 }
 

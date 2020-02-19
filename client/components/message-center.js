@@ -21,7 +21,7 @@ export default connect(
       <ErrorMessage flag={props.portfolioError}>
         There was an error while retrieving your portfolio.
       </ErrorMessage>
-      <ErrorMessage flag={props.quotesError}>
+      <ErrorMessage flag={!!props.quotesError}>
         There was an error while retrieving your quotes. Information is not up
         to date.
       </ErrorMessage>
