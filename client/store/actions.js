@@ -45,33 +45,31 @@ const boughtStock = (stock, qty, cashRemaining) => ({
 })
 
 export const buyStock = (symbol, qty) => async (dispatch, getState) => {
-  let res, price
+  let res, price, quote
   const {id} = getState().user
   try {
-    const quote = await axios.get(singleApi(symbol))
+    quote = await axios.get(singleApi(symbol))
     price = centipennies(quote.data.latestPrice)
   } catch (error) {
     dispatch(getQuotesError())
   }
-  const req = {symbol, qty, price}
-  if (price) {
-    try {
-      res = await axios.post(`/api/users/${id}/portfolio/`, req)
-      const finalStock = res.data.stock
-      finalStock.latestPrice = dollars(price)
-      const cash = +res.data.user.cash
-      if (res) dispatch(boughtStock(finalStock, qty, cash))
-    } catch (error) {
-      dispatch(buyStockError())
-    }
-    if (res) {
-      try {
-        const newRes = await axios.post(`/api/users/${id}/history`, req)
-        if (newRes) dispatch(addedToHistory(newRes.data))
-      } catch (error) {
-        dispatch(addToHistoryError())
-      }
-    }
+  const buy = {symbol, qty, price}
+  try {
+    res = await axios.post(`/api/users/${id}/portfolio/`, buy)
+    const finalStock = res.data.stock
+    finalStock.latestPrice = dollars(price)
+    finalStock.latestTime = quote.data.latestTime
+    finalStock.open = quote.data.open
+    const cash = +res.data.user.cash
+    dispatch(boughtStock(finalStock, qty, cash))
+  } catch (error) {
+    dispatch(buyStockError())
+  }
+  try {
+    const newRes = await axios.post(`/api/users/${id}/history`, buy)
+    if (newRes) dispatch(addedToHistory(newRes.data))
+  } catch (error) {
+    dispatch(addToHistoryError())
   }
 }
 
