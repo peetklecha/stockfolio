@@ -14,8 +14,11 @@ const batchApi = symbols =>
     ','
   )}&types=quote&token=${apiKey}`
 
+const centipennies = dollars => Math.floor(dollars * 10000)
+
 module.exports = {
   checkUser,
   singleApi,
-  batchApi
+  batchApi,
+  centipennies
 }

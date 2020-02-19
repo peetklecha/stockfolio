@@ -21,7 +21,7 @@ export default function(state = defaultTransactions, action) {
     case ADDED_TO_HISTORY:
       return {
         ...state,
-        transaction: [...state.transactions, action.transaction]
+        transactions: [...state.transactions, action.transaction]
       }
     case ADD_TO_HISTORY_ERROR:
       return {...state, addError: true}

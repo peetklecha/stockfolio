@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {centipennies, dollars} from '../utils'
+import {centipennies} from '../utils'
 import {
   GOT_PORTFOLIO,
   GET_QUOTES_ERROR,
@@ -36,36 +36,40 @@ const boughtStock = (stock, qty, cashRemaining) => ({
 })
 
 export const buyStock = (symbol, qty) => async (dispatch, getState) => {
-  let res, price, quote, quit
+  let res, quit, price
   const {id} = getState().user
+  // try {
+  //   quote = await axios.get(`/api/quotes/single/${symbol}`)
+  //   price = centipennies(quote.data.latestPrice)
+  // } catch (error) {
+  //   dispatch(getQuotesError(error.response))
+  //   quit = true
+  // }
+  // if (quit) return
+  // if (qty * price > getState().user.cash) {
+  //   dispatch(buyStockError('Insufficient funds.'))
+  //   return
+  // }
   try {
-    quote = await axios.get(`/api/quotes/single/${symbol}`)
-    price = centipennies(quote.data.latestPrice)
-  } catch (error) {
-    dispatch(getQuotesError(error.response))
-    quit = true
-  }
-  if (quit) return
-  if (qty * price > getState().user.cash) {
-    dispatch(buyStockError('Insufficient funds.'))
-    return
-  }
-  const buy = {symbol, qty, price}
-  try {
-    res = await axios.post(`/api/users/${id}/portfolio/`, buy)
+    res = await axios.post(`/api/users/${id}/portfolio/`, {symbol, qty})
     const finalStock = res.data.stock
-    finalStock.latestPrice = dollars(price)
-    finalStock.latestTime = quote.data.latestTime
-    finalStock.open = quote.data.open
+    finalStock.latestPrice = res.data.latestPrice
+    finalStock.latestTime = res.data.latestTime
+    finalStock.open = res.data.open
     const cash = +res.data.user.cash
     dispatch(boughtStock(finalStock, qty, cash))
+    price = centipennies(finalStock.latestPrice)
   } catch (error) {
     dispatch(buyStockError(error.response.data))
     quit = true
   }
   if (quit) return
   try {
-    const newRes = await axios.post(`/api/users/${id}/history`, buy)
+    const newRes = await axios.post(`/api/users/${id}/history`, {
+      symbol,
+      qty,
+      price
+    })
     if (newRes) dispatch(addedToHistory(newRes.data))
   } catch (error) {
     dispatch(addToHistoryError())

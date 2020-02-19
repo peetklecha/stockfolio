@@ -46,7 +46,7 @@ export default connect(
     componentDidUpdate(prevProps) {
       if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
         this.props.getQuotes()
-        this.setIntervalId = setInterval(() => this.props.getQuotes(), 60000)
+        this.setIntervalId = setInterval(() => this.props.getQuotes(), 1000)
       }
     }
 
