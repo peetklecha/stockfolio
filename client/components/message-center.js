@@ -24,7 +24,7 @@ export default connect(state => ({
       <ErrorMessage flag={!!props.buyError}>
         {console.log(props.buyError)}
         {'There was an error processing your purchase. ' +
-          (props.buyError || 'Contact us for more information.')}
+          (props.buyError.data || 'Contact us for more information.')}
       </ErrorMessage>
       <ErrorMessage flag={props.transAddError}>
         Your purchase has gone through, but is not reflected in your transaction

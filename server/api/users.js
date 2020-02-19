@@ -17,16 +17,27 @@ router.get('/:id/portfolio', checkUser, async (req, res, next) => {
 })
 
 router.post('/:id/portfolio', checkUser, async (req, res, next) => {
-  try {
-    const {symbol} = req.body
-    const qty = +req.body.qty
-    if (qty < 0 || !Number.isInteger(qty))
-      res.status(400).send('Please enter a valid quantity.')
-    else {
-      const quote = await axios.get(singleApi(symbol))
+  const {symbol} = req.body
+  const qty = +req.body.qty
+  if (qty < 0 || !Number.isInteger(qty)) {
+    try {
+      res.status(400).send('!!!Please enter a valid quantity.')
+    } catch (error) {
+      next(error)
+    }
+  } else {
+    let quote
+    try {
+      quote = await axios.get(singleApi(symbol))
+    } catch (error) {
+      if (error.response.status === 404)
+        res.status(404).send('Not a valid symbol.')
+      else next(error)
+      return
+    }
+    try {
       const price = +quote.data.latestPrice
       const cash = +(await User.findByPk(req.params.id)).cash
-      console.log(qty, price, cash)
       if (qty * centipennies(price) > cash)
         res.status(400).send('Insufficient funds.')
       else {
@@ -48,9 +59,9 @@ router.post('/:id/portfolio', checkUser, async (req, res, next) => {
           open: quote.data.open
         })
       }
+    } catch (error) {
+      next(error)
     }
-  } catch (error) {
-    next(error)
   }
 })
 

@@ -59,7 +59,7 @@ export default connect(
       const symbol = evt.target.symbol.value
       const qty = +evt.target.qty.value
       if (qty < 0 || !Number.isInteger(qty))
-        this.props.buyStockError('Please enter a valid quantity.')
+        this.props.buyStockError({data: 'Please enter a valid quantity.'})
       else this.props.buyStock(symbol, qty)
       this.setState({symbol: '', qty: ''})
     }

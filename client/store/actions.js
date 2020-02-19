@@ -25,7 +25,7 @@ const getQuotesError = error => ({type: GET_QUOTES_ERROR, error})
 const addedToHistory = transaction => ({type: ADDED_TO_HISTORY, transaction})
 const gotTransactions = transactions => ({type: GOT_TRANSACTIONS, transactions})
 const getTransactionsError = () => ({type: GET_TRANSACTIONS_ERROR})
-export const buyStockError = (error = '') => ({type: BUY_STOCK_ERROR, error})
+export const buyStockError = error => ({type: BUY_STOCK_ERROR, error})
 const addToHistoryError = () => ({type: ADD_TO_HISTORY_ERROR})
 const logoutError = error => ({type: LOGOUT_ERROR, error})
 const boughtStock = (stock, qty, cashRemaining) => ({
@@ -36,20 +36,8 @@ const boughtStock = (stock, qty, cashRemaining) => ({
 })
 
 export const buyStock = (symbol, qty) => async (dispatch, getState) => {
-  let res, quit, price
+  let res, price
   const {id} = getState().user
-  // try {
-  //   quote = await axios.get(`/api/quotes/single/${symbol}`)
-  //   price = centipennies(quote.data.latestPrice)
-  // } catch (error) {
-  //   dispatch(getQuotesError(error.response))
-  //   quit = true
-  // }
-  // if (quit) return
-  // if (qty * price > getState().user.cash) {
-  //   dispatch(buyStockError('Insufficient funds.'))
-  //   return
-  // }
   try {
     res = await axios.post(`/api/users/${id}/portfolio/`, {symbol, qty})
     const finalStock = res.data.stock
@@ -60,10 +48,9 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
     dispatch(boughtStock(finalStock, qty, cash))
     price = centipennies(finalStock.latestPrice)
   } catch (error) {
-    dispatch(buyStockError(error.response.data))
-    quit = true
+    dispatch(buyStockError(error.response))
+    return
   }
-  if (quit) return
   try {
     const newRes = await axios.post(`/api/users/${id}/history`, {
       symbol,
