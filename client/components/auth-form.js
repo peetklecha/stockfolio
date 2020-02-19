@@ -5,7 +5,13 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import PropTypes from 'prop-types'
 import {auth} from '../store/actions'
-import {SIGNIN_BUTTON, SIGNUP_BUTTON} from './constants'
+import {
+  SIGNIN_BUTTON,
+  SIGNUP_BUTTON,
+  NAME_FIELD,
+  EMAIL_FIELD,
+  PASSWORD_FIELD
+} from './constants'
 
 const AuthForm = props => {
   const {name, displayName, handleSubmit, error} = props
@@ -20,20 +26,20 @@ const AuthForm = props => {
             <TextField
               id="name-field"
               name="userName"
-              label="Name"
+              label={NAME_FIELD}
               variant="outlined"
             />
           )}
           <TextField
             id="email-field"
             name="email"
-            label="Email"
+            label={EMAIL_FIELD}
             variant="outlined"
           />
           <TextField
             id="password-field"
             name="password"
-            label="Password"
+            label={PASSWORD_FIELD}
             variant="outlined"
             type="password"
           />

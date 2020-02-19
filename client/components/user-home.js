@@ -12,6 +12,7 @@ import {
   buyStock,
   getTransactions
 } from '../store/actions'
+import {SYMBOL_FIELD, QTY_FIELD, CASH_LABEL, BUY_BUTTON} from './constants'
 
 export default connect(
   state => ({
@@ -66,7 +67,6 @@ export default connect(
     }
 
     render() {
-      console.log('RENDERING')
       const showConsole = this.props.location.pathname === '/home/portfolio'
       return (
         <div id="home-page">
@@ -75,7 +75,9 @@ export default connect(
             <Route path="/home/portfolio" component={Portfolio} />
             <Route path="/home/transactions" component={Transactions} />
             <div className={showConsole ? 'console' : 'console hide'}>
-              <h3>{`Cash - $${(this.props.cash / 10000).toFixed(2)}`}</h3>
+              <h3>{`${CASH_LABEL} $${(this.props.cash / 10000).toFixed(
+                2
+              )}`}</h3>
               <form
                 onSubmit={this.handleSubmit.bind(this)}
                 name="buy"
@@ -84,7 +86,7 @@ export default connect(
                 <TextField
                   id="symbol-field"
                   name="symbol"
-                  label="Symbol"
+                  label={SYMBOL_FIELD}
                   variant="outlined"
                   onChange={this.handleChange.bind(this)}
                   value={this.state.symbol}
@@ -92,13 +94,13 @@ export default connect(
                 <TextField
                   id="qty-field"
                   name="qty"
-                  label="Qty"
+                  label={QTY_FIELD}
                   variant="outlined"
                   onChange={this.handleChange.bind(this)}
                   value={this.state.qty}
                 />
                 <Button variant="contained" color="primary" type="submit">
-                  Buy
+                  {BUY_BUTTON}
                 </Button>
               </form>
             </div>

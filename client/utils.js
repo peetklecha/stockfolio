@@ -1,3 +1,5 @@
+import {PORTFOLIO_LABEL} from './components/constants'
+
 export const arrayReplace = (arr, elem, identifier) => {
   const newArr = [...arr]
   const index = newArr.findIndex(
@@ -10,3 +12,29 @@ export const arrayReplace = (arr, elem, identifier) => {
 export const centipennies = dollars => Math.floor(dollars * 10000)
 
 export const dollars = cpennies => Math.floor(cpennies / 10000)
+
+export const displayCpennies = cpennies => dollars(cpennies).toFixed(2)
+
+export const displayDollars = dollarAmount =>
+  Number.parseFloat(dollarAmount).toFixed(2)
+
+export const stockChange = stock =>
+  stock.latestPrice > stock.open
+    ? 'up'
+    : stock.latestPrice < stock.open && 'down'
+
+const getPortfolioValue = portfolio => {
+  const stocksWithQuotes = portfolio.filter(stock => stock.latestPrice)
+  const tail = stocksWithQuotes.length < portfolio.length ? '...' : ''
+  return (
+    stocksWithQuotes
+      .map(stock => stock.shares * stock.latestPrice)
+      .reduce((x, y) => x + y, 0)
+      .toFixed(2)
+      .toString() + tail
+  )
+}
+
+export const portfolioHeader = portfolio => {
+  return PORTFOLIO_LABEL + ` ($${getPortfolioValue(portfolio)})`
+}

@@ -1,63 +1,24 @@
-import React, {Component} from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 import {List} from '@material-ui/core'
 import PortfolioEntry from './portfolio-entry'
-import {getPortfolio} from '../store/actions'
+import {displayDollars, stockChange, portfolioHeader} from '../utils'
 
-export default connect(
-  state => ({
-    cash: state.user.cash,
-    email: state.user.email,
-    name: state.user.name,
-    portfolio: state.portfolio.stocks,
-    portfolioLoaded: state.portfolio.loaded
-  }),
-  dispatch => ({
-    getPortfolio: () => dispatch(getPortfolio())
-  })
-)(
-  class Portfolio extends Component {
-    getPortfolioValue() {
-      if (!this.props.portfolio.length) return '0.00'
-      const stocksWithQuotes = this.props.portfolio.filter(
-        stock => stock.latestPrice
-      )
-      const tail =
-        stocksWithQuotes.length < this.props.portfolio.length ? '...' : ''
-      return (
-        stocksWithQuotes
-          .map(stock => stock.shares * Number.parseFloat(stock.latestPrice))
-          .reduce((x, y) => x + y, 0)
-          .toFixed(2)
-          .toString() + tail
-      )
-    }
-
-    render() {
-      return (
-        <div id="list-page">
-          <h1>{`Portfolio ($${this.getPortfolioValue()})`}</h1>
-          <List id="portfolio-container">
-            {this.props.portfolio.map(stock => (
-              <PortfolioEntry
-                key={stock.symbol}
-                symbol={stock.symbol}
-                shares={stock.shares}
-                status={
-                  stock.latestPrice > stock.open
-                    ? 'up'
-                    : stock.latestPrice < stock.open && 'down'
-                }
-                value={
-                  stock.latestPrice
-                    ? Number.parseFloat(stock.latestPrice).toFixed(2)
-                    : '...'
-                }
-              />
-            ))}
-          </List>
-        </div>
-      )
-    }
-  }
-)
+export default connect(state => ({
+  portfolio: state.portfolio.stocks
+}))(({portfolio}) => (
+  <div id="list-page">
+    <h1>{portfolioHeader(portfolio)}</h1>
+    <List id="portfolio-container">
+      {portfolio.map(stock => (
+        <PortfolioEntry
+          key={stock.symbol}
+          symbol={stock.symbol}
+          shares={stock.shares}
+          status={stockChange(stock)}
+          value={stock.latestPrice ? displayDollars(stock.latestPrice) : '...'}
+        />
+      ))}
+    </List>
+  </div>
+))

@@ -4,6 +4,7 @@ import {withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {Button, ButtonGroup} from '@material-ui/core'
 import {logout} from '../store/actions'
+import {PORTFOLIO_LABEL, TRANSACTIONS_LABEL} from './constants'
 
 export default withRouter(
   connect(null, dispatch => ({doLogout: () => dispatch(logout())}))(
@@ -19,13 +20,13 @@ export default withRouter(
               variant={portfolioSelected ? 'contained' : 'outlined'}
               onClick={() => history.push('/home/portfolio')}
             >
-              Portfolio
+              {PORTFOLIO_LABEL}
             </Button>
             <Button
               variant={portfolioSelected ? 'outlined' : 'contained'}
               onClick={() => history.push('/home/transactions')}
             >
-              Transactions
+              {TRANSACTIONS_LABEL}
             </Button>
           </ButtonGroup>
         </div>
