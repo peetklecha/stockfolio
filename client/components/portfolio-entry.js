@@ -7,7 +7,8 @@ export default ({symbol, shares, value, status}) => {
     <div className={'list-item ' + status}>
       <ListItem>
         <ListItemText primary={symbol} secondary={`${shares} shares`} />
-        <ListItemText primary={'$' + value} />
+        {/* <ListItemText primary={'$' + value} /> */}
+        {'$' + value}
       </ListItem>
       <Divider />
     </div>

@@ -66,8 +66,7 @@ a > button {
 }
 
 #list-page {
-  padding: 5vw;
-  padding-top: 0vw;
+  padding-left: 5vw;
   align-self: flex-start;
 }
 
@@ -77,7 +76,6 @@ a > button {
 
 #portfolio-container {
   width: 50vw;
-  border-right: solid 2px black;
 }
 
 .console {
@@ -90,10 +88,6 @@ a > button {
 
 .hide {
   opacity: 0;
-}
-
-.list-item {
-  width: 70%;
 }
 
 #nav-container {
