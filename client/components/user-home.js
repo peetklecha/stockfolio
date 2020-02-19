@@ -5,7 +5,6 @@ import {TextField, Button} from '@material-ui/core'
 import Portfolio from './portfolio'
 import Transactions from './transactions'
 import NavBar from './navbar'
-import MessageCenter from './message-center'
 import {
   getPortfolio,
   getQuotes,
@@ -102,7 +101,6 @@ export default connect(
               </form>
             </div>
           </div>
-          <MessageCenter />
         </div>
       )
     }

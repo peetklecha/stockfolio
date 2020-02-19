@@ -53,7 +53,7 @@ const AuthForm = props => {
               </Link>
             )}
           </div>
-          {error && error.response && <div> {error.response.data} </div>}
+          {/* {error && error.response && <div> {error.response.data} </div>} */}
         </form>
       </div>
     </div>

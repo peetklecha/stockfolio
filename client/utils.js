@@ -11,7 +11,7 @@ export const arrayReplace = (arr, elem, identifier) => {
 
 export const centipennies = dollars => Math.floor(dollars * 10000)
 
-export const dollars = cpennies => Math.floor(cpennies / 10000)
+export const dollars = cpennies => cpennies / 10000
 
 export const displayCpennies = cpennies => dollars(cpennies).toFixed(2)
 
@@ -38,4 +38,4 @@ const getPortfolioValue = portfolio => {
 export const portfolioHeader = portfolio =>
   PORTFOLIO_LABEL + ` ($${getPortfolioValue(portfolio)})`
 
-export const cashHeader = cash => CASH_LABEL + ` $${displayDollars(cash)}`
+export const cashHeader = cash => CASH_LABEL + ` $${displayCpennies(cash)}`

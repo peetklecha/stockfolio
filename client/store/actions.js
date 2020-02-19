@@ -13,7 +13,8 @@ import {
   GET_USER,
   REMOVE_USER,
   BUY_STOCK_ERROR,
-  ADD_TO_HISTORY_ERROR
+  ADD_TO_HISTORY_ERROR,
+  LOGOUT_ERROR
 } from './constants'
 
 const singleApi = symbol =>
@@ -35,6 +36,7 @@ const gotTransactions = transactions => ({type: GOT_TRANSACTIONS, transactions})
 const getTransactionsError = () => ({type: GET_TRANSACTIONS_ERROR})
 const buyStockError = () => ({type: BUY_STOCK_ERROR})
 const addToHistoryError = () => ({type: ADD_TO_HISTORY_ERROR})
+const logoutError = error => ({type: LOGOUT_ERROR, error})
 const boughtStock = (stock, qty, cashRemaining) => ({
   type: BOUGHT_STOCK,
   stock,
@@ -108,7 +110,7 @@ export const me = () => async dispatch => {
     const res = await axios.get('/auth/me')
     dispatch(getUser(res.data || {checkedForUser: true}))
   } catch (err) {
-    console.error(err)
+    dispatch(getUser({error: err}))
   }
 }
 
@@ -123,7 +125,7 @@ export const auth = (email, password, method, name) => async dispatch => {
   try {
     dispatch(getUser(res.data))
   } catch (dispatchOrHistoryErr) {
-    console.error(dispatchOrHistoryErr)
+    dispatch(getUser({error: dispatchOrHistoryErr}))
   }
 }
 
@@ -132,6 +134,6 @@ export const logout = () => async dispatch => {
     await axios.post('/auth/logout')
     dispatch(removeUser())
   } catch (err) {
-    console.error(err)
+    dispatch(logoutError({error: err}))
   }
 }

@@ -7,7 +7,8 @@ export default connect(state => ({
   quotesError: state.portfolio.quotesError,
   buyError: state.portfolio.buyError,
   transAddError: state.history.addError,
-  transGetError: state.history.getError
+  transGetError: state.history.getError,
+  userError: state.user.error
 }))(props => {
   return (
     <div>
@@ -32,6 +33,11 @@ export default connect(state => ({
       </ErrorMessage>
       <ErrorMessage flag={props.transGetError}>
         There was an error while retrieving your transaction history.
+      </ErrorMessage>
+      <ErrorMessage flag={!!props.userError}>
+        {`There was an authentication problem${props.userError &&
+          props.userError.response &&
+          ': ' + props.userError.response.data}`}
       </ErrorMessage>
     </div>
   )
