@@ -7,13 +7,19 @@ import {displayDollars, stockChange, portfolioHeader} from '../utils'
 
 export default connect(state => ({
   portfolio: state.portfolio.stocks,
-  portfolioError: state.portfolio.portfolioError
-}))(({portfolio, portfolioError}) => (
+  portfolioError: state.portfolio.portfolioError,
+  quotesError: state.portfolio.quotesError
+}))(({portfolio, portfolioError, quotesError}) => (
   <div id="list-page">
     <h1>{portfolioHeader(portfolio)}</h1>
     {portfolioError && (
       <Alert severity="warning">
         Your portfolio has not loaded properly. Retrying...
+      </Alert>
+    )}
+    {quotesError && (
+      <Alert severity="warning">
+        Price information is out of date. Retrying...
       </Alert>
     )}
     <List id="portfolio-container">

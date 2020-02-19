@@ -63,11 +63,20 @@ export default connect(
       if (this.hasOccurred(prevProps, 'portfolioError')) {
         this.portfolioErrorRetryId = setInterval(
           () => this.props.getPortfolio(),
-          10000
+          5000
         )
       }
       if (this.hasStopped(prevProps, 'portfolioError')) {
         clearInterval(this.portfolioErrorRetryId)
+      }
+      if (this.hasOccurred(prevProps, 'transGetError')) {
+        this.transGetErrorRetryId = setInterval(
+          () => this.props.getTransactions(),
+          5000
+        )
+      }
+      if (this.hasStopped(prevProps, 'transGetError')) {
+        clearInterval(this.transGetErrorRetryId)
       }
     }
 

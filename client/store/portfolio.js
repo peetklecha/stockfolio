@@ -36,7 +36,8 @@ export default function(state = defaultPortfolio, action) {
           latestPrice: action.quotes[stock.symbol].quote.latestPrice,
           latestTime: action.quotes[stock.symbol].quote.latestTime,
           open: action.quotes[stock.symbol].quote.open
-        }))
+        })),
+        quotesError: false
       }
     case BOUGHT_STOCK:
       return {

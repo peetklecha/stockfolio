@@ -15,7 +15,7 @@ const defaultTransactions = {
 export default function(state = defaultTransactions, action) {
   switch (action.type) {
     case GOT_TRANSACTIONS:
-      return {...state, transactions: action.transactions}
+      return {...state, transactions: action.transactions, getError: false}
     case GET_TRANSACTIONS_ERROR:
       return {...state, getError: true}
     case ADDED_TO_HISTORY:
