@@ -16,6 +16,7 @@ export default connect(state => ({
         There was an error while retrieving your portfolio.
       </ErrorMessage>
       <ErrorMessage flag={props.quotesError}>
+        {console.log(props.quotesError)}
         {props.quotesError.status && props.quotesError.status === 404
           ? 'That is not a valid symbol.'
           : 'There was an error while retrieving your quotes. Information is not up to date.'}

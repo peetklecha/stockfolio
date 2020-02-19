@@ -55,6 +55,10 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
     quit = true
   }
   if (quit) return
+  if (qty * price > getState().user.cash) {
+    dispatch(buyStockError('Insufficient funds.'))
+    return
+  }
   const buy = {symbol, qty, price}
   try {
     res = await axios.post(`/api/users/${id}/portfolio/`, buy)
@@ -65,7 +69,7 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
     const cash = +res.data.user.cash
     dispatch(boughtStock(finalStock, qty, cash))
   } catch (error) {
-    dispatch(buyStockError())
+    dispatch(buyStockError(error.response.data))
     quit = true
   }
   if (quit) return
