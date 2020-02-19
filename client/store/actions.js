@@ -77,9 +77,12 @@ export const getPortfolio = () => async (dispatch, getState) => {
 
 export const getQuotes = () => async (dispatch, getState) => {
   try {
-    const {id} = getState().user
-    const quotes = await axios.get(`/api/quotes/user/${id}`)
-    dispatch(gotQuotes(quotes.data))
+    if (getState().portfolio.stocks.length === 0) dispatch(gotQuotes([]))
+    else {
+      const {id} = getState().user
+      const quotes = await axios.get(`/api/quotes/user/${id}`)
+      dispatch(gotQuotes(quotes.data))
+    }
   } catch (err) {
     dispatch(getQuotesError(err.response))
   }

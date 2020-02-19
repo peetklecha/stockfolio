@@ -25,9 +25,9 @@ export default withRouter(
         return (
           <div>
             <Switch>
+              {isLoggedIn && <Route component={UserHome} />}
               <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
-              {isLoggedIn && <Route component={UserHome} />}
               <Route component={Login} />
             </Switch>
             <MessageCenter />
