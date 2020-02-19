@@ -1,5 +1,4 @@
 import axios from 'axios'
-import {IEX_API_KEY} from '../../secrets'
 import {centipennies, dollars} from '../utils'
 import {
   GOT_PORTFOLIO,
@@ -16,14 +15,6 @@ import {
   ADD_TO_HISTORY_ERROR,
   LOGOUT_ERROR
 } from './constants'
-
-const singleApi = symbol =>
-  `https://sandbox.iexapis.com/stable/stock/${symbol}/quote?token=${IEX_API_KEY}`
-
-const batchApi = symbols =>
-  `https://sandbox.iexapis.com/stable/stock/market/batch?symbols=${symbols.join(
-    ','
-  )}&types=quote&token=${IEX_API_KEY}`
 
 const getUser = user => ({type: GET_USER, user})
 const removeUser = () => ({type: REMOVE_USER})
@@ -48,7 +39,7 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
   let res, price, quote, quit
   const {id} = getState().user
   try {
-    quote = await axios.get(singleApi(symbol))
+    quote = await axios.get(`/api/quotes/single/${symbol}`)
     price = centipennies(quote.data.latestPrice)
   } catch (error) {
     dispatch(getQuotesError(error.response))
@@ -93,9 +84,9 @@ export const getPortfolio = () => async (dispatch, getState) => {
 
 export const getQuotes = () => async (dispatch, getState) => {
   try {
-    const symbols = getState().portfolio.stocks.map(stock => stock.symbol)
-    const quotesObj = await axios.get(batchApi(symbols))
-    dispatch(gotQuotes(quotesObj.data))
+    const {id} = getState().user
+    const quotes = await axios.get(`/api/quotes/user/${id}`)
+    dispatch(gotQuotes(quotes.data))
   } catch (err) {
     dispatch(getQuotesError())
   }

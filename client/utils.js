@@ -5,7 +5,8 @@ export const arrayReplace = (arr, elem, identifier) => {
   const index = newArr.findIndex(
     eachElem => eachElem[identifier] === elem[identifier]
   )
-  newArr[index] = elem
+  if (index === -1) newArr.push(elem)
+  else newArr[index] = elem
   return newArr
 }
 

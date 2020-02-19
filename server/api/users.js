@@ -18,17 +18,21 @@ router.get('/:id/portfolio', checkUser, async (req, res, next) => {
 router.post('/:id/portfolio', checkUser, async (req, res, next) => {
   try {
     const {symbol, qty, price} = req.body
-    const stock = await Stock.findOrCreate({
-      where: {symbol, userId: req.params.id}
-    })
-    const updatedStock = await stock[0].update({
-      shares: +stock[0].shares + +qty
-    })
-    const user = await User.findByPk(req.params.id)
-    const updatedUser = await user.update({
-      cash: user.cash - +qty * +price
-    })
-    res.json({stock: updatedStock, user: updatedUser})
+    const {cash} = await User.findByPk(req.params.id)
+    if (+qty * +price > +cash) res.status(400).send('Insufficient funds.')
+    else {
+      const stock = await Stock.findOrCreate({
+        where: {symbol, userId: req.params.id}
+      })
+      const updatedStock = await stock[0].update({
+        shares: +stock[0].shares + +qty
+      })
+      const user = await User.findByPk(req.params.id)
+      const updatedUser = await user.update({
+        cash: user.cash - +qty * +price
+      })
+      res.json({stock: updatedStock, user: updatedUser})
+    }
   } catch (error) {
     next(error)
   }
