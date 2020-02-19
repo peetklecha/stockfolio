@@ -1,4 +1,4 @@
-import {PORTFOLIO_LABEL} from './components/constants'
+import {PORTFOLIO_LABEL, CASH_LABEL} from './components/constants'
 
 export const arrayReplace = (arr, elem, identifier) => {
   const newArr = [...arr]
@@ -35,6 +35,7 @@ const getPortfolioValue = portfolio => {
   )
 }
 
-export const portfolioHeader = portfolio => {
-  return PORTFOLIO_LABEL + ` ($${getPortfolioValue(portfolio)})`
-}
+export const portfolioHeader = portfolio =>
+  PORTFOLIO_LABEL + ` ($${getPortfolioValue(portfolio)})`
+
+export const cashHeader = cash => CASH_LABEL + ` $${displayDollars(cash)}`

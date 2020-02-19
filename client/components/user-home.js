@@ -12,13 +12,12 @@ import {
   buyStock,
   getTransactions
 } from '../store/actions'
-import {SYMBOL_FIELD, QTY_FIELD, CASH_LABEL, BUY_BUTTON} from './constants'
+import {SYMBOL_FIELD, QTY_FIELD, BUY_BUTTON} from './constants'
+import {cashHeader} from '../utils'
 
 export default connect(
   state => ({
     cash: state.user.cash,
-    name: state.user.name,
-    portfolio: state.portfolio.stocks,
     portfolioLoaded: state.portfolio.loaded
   }),
   dispatch => ({
@@ -75,9 +74,7 @@ export default connect(
             <Route path="/home/portfolio" component={Portfolio} />
             <Route path="/home/transactions" component={Transactions} />
             <div className={showConsole ? 'console' : 'console hide'}>
-              <h3>{`${CASH_LABEL} $${(this.props.cash / 10000).toFixed(
-                2
-              )}`}</h3>
+              <h3>{cashHeader(this.props.cash)}</h3>
               <form
                 onSubmit={this.handleSubmit.bind(this)}
                 name="buy"

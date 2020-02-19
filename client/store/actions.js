@@ -95,10 +95,8 @@ export const getQuotes = () => async (dispatch, getState) => {
 
 export const getTransactions = () => async (dispatch, getState) => {
   try {
-    console.log('in the thunk')
     const {id} = getState().user
     const res = await axios.get(`/api/users/${id}/history`)
-    console.log('on the way out')
     dispatch(gotTransactions(res.data))
   } catch (err) {
     dispatch(getTransactionsError())
@@ -117,10 +115,8 @@ export const me = () => async dispatch => {
 export const auth = (email, password, method, name) => async dispatch => {
   let res
   try {
-    console.log('starting thunk')
     res = await axios.post(`/auth/${method}`, {email, password, name})
   } catch (authError) {
-    console.log('erroring in thunk')
     return dispatch(getUser({error: authError}))
   }
 
