@@ -16,16 +16,14 @@ export default connect(state => ({
         There was an error while retrieving your portfolio.
       </ErrorMessage>
       <ErrorMessage flag={props.quotesError}>
-        There was an error while retrieving your quotes. Information is not up
-        to date.
+        {props.quotesError.status && props.quotesError.status === 404
+          ? 'That is not a valid symbol.'
+          : 'There was an error while retrieving your quotes. Information is not up to date.'}
       </ErrorMessage>
-      <ErrorMessage flag={props.buyError}>
-        There was an error processing your purchase. Contact us for more
-        information.
-      </ErrorMessage>
-      <ErrorMessage flag={props.buyError}>
-        There was an error processing your purchase. Contact us for more
-        information.
+      <ErrorMessage flag={!!props.buyError}>
+        {console.log(props.buyError)}
+        {'There was an error processing your purchase. ' +
+          (props.buyError || 'Contact us for more information.')}
       </ErrorMessage>
       <ErrorMessage flag={props.transAddError}>
         Your purchase has gone through, but is not reflected in your transaction

@@ -30,11 +30,11 @@ const removeUser = () => ({type: REMOVE_USER})
 const gotPortfolio = portfolio => ({type: GOT_PORTFOLIO, portfolio})
 const getPortfolioError = () => ({type: GET_PORTFOLIO_ERROR})
 const gotQuotes = quotes => ({type: GOT_QUOTES, quotes})
-const getQuotesError = () => ({type: GET_QUOTES_ERROR})
+const getQuotesError = error => ({type: GET_QUOTES_ERROR, error})
 const addedToHistory = transaction => ({type: ADDED_TO_HISTORY, transaction})
 const gotTransactions = transactions => ({type: GOT_TRANSACTIONS, transactions})
 const getTransactionsError = () => ({type: GET_TRANSACTIONS_ERROR})
-const buyStockError = () => ({type: BUY_STOCK_ERROR})
+export const buyStockError = (error = '') => ({type: BUY_STOCK_ERROR, error})
 const addToHistoryError = () => ({type: ADD_TO_HISTORY_ERROR})
 const logoutError = error => ({type: LOGOUT_ERROR, error})
 const boughtStock = (stock, qty, cashRemaining) => ({
@@ -45,14 +45,16 @@ const boughtStock = (stock, qty, cashRemaining) => ({
 })
 
 export const buyStock = (symbol, qty) => async (dispatch, getState) => {
-  let res, price, quote
+  let res, price, quote, quit
   const {id} = getState().user
   try {
     quote = await axios.get(singleApi(symbol))
     price = centipennies(quote.data.latestPrice)
   } catch (error) {
-    dispatch(getQuotesError())
+    dispatch(getQuotesError(error.response))
+    quit = true
   }
+  if (quit) return
   const buy = {symbol, qty, price}
   try {
     res = await axios.post(`/api/users/${id}/portfolio/`, buy)
@@ -64,7 +66,9 @@ export const buyStock = (symbol, qty) => async (dispatch, getState) => {
     dispatch(boughtStock(finalStock, qty, cash))
   } catch (error) {
     dispatch(buyStockError())
+    quit = true
   }
+  if (quit) return
   try {
     const newRes = await axios.post(`/api/users/${id}/history`, buy)
     if (newRes) dispatch(addedToHistory(newRes.data))

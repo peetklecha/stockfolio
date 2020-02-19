@@ -37,11 +37,11 @@ export default function(state = defaultPortfolio, action) {
         stocks: arrayReplace(state.stocks, action.stock, 'symbol')
       }
     case BUY_STOCK_ERROR:
-      return {...state, buyError: true}
+      return {...state, buyError: action.error}
     case GET_PORTFOLIO_ERROR:
       return {...state, portfolioError: true}
     case GET_QUOTES_ERROR:
-      return {...state, quotesError: true}
+      return {...state, quotesError: action.error}
     case REMOVE_USER:
       return defaultPortfolio
     default:

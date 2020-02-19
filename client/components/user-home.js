@@ -9,7 +9,8 @@ import {
   getPortfolio,
   getQuotes,
   buyStock,
-  getTransactions
+  getTransactions,
+  buyStockError
 } from '../store/actions'
 import {SYMBOL_FIELD, QTY_FIELD, BUY_BUTTON} from './constants'
 import {cashHeader} from '../utils'
@@ -23,7 +24,8 @@ export default connect(
     getPortfolio: () => dispatch(getPortfolio()),
     getQuotes: () => dispatch(getQuotes()),
     buyStock: (symbol, qty) => dispatch(buyStock(symbol, qty)),
-    getTransactions: () => dispatch(getTransactions())
+    getTransactions: () => dispatch(getTransactions()),
+    buyStockError: error => dispatch(buyStockError(error))
   })
 )(
   class UserHome extends Component {
@@ -55,8 +57,10 @@ export default connect(
     handleSubmit(evt) {
       evt.preventDefault()
       const symbol = evt.target.symbol.value
-      const qty = evt.target.qty.value
-      this.props.buyStock(symbol, qty)
+      const qty = +evt.target.qty.value
+      if (qty < 0 || !Number.isInteger(qty))
+        this.props.buyStockError('Please enter a valid quantity.')
+      else this.props.buyStock(symbol, qty)
       this.setState({symbol: '', qty: ''})
     }
 
