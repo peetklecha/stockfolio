@@ -13,7 +13,8 @@ import {
   REMOVE_USER,
   BUY_STOCK_ERROR,
   ADD_TO_HISTORY_ERROR,
-  LOGOUT_ERROR
+  LOGOUT_ERROR,
+  CLEAR_BUY_STOCK_ERROR
 } from './constants'
 
 const getUser = user => ({type: GET_USER, user})
@@ -26,6 +27,7 @@ const addedToHistory = transaction => ({type: ADDED_TO_HISTORY, transaction})
 const gotTransactions = transactions => ({type: GOT_TRANSACTIONS, transactions})
 const getTransactionsError = () => ({type: GET_TRANSACTIONS_ERROR})
 export const buyStockError = error => ({type: BUY_STOCK_ERROR, error})
+export const clearBuyStockError = () => ({type: CLEAR_BUY_STOCK_ERROR})
 const addToHistoryError = () => ({type: ADD_TO_HISTORY_ERROR})
 const logoutError = error => ({type: LOGOUT_ERROR, error})
 const boughtStock = (stock, qty, cashRemaining) => ({

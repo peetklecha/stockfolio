@@ -1,14 +1,21 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {List} from '@material-ui/core'
+import {Alert} from '@material-ui/lab'
 import PortfolioEntry from './portfolio-entry'
 import {displayDollars, stockChange, portfolioHeader} from '../utils'
 
 export default connect(state => ({
-  portfolio: state.portfolio.stocks
-}))(({portfolio}) => (
+  portfolio: state.portfolio.stocks,
+  portfolioError: state.portfolio.portfolioError
+}))(({portfolio, portfolioError}) => (
   <div id="list-page">
     <h1>{portfolioHeader(portfolio)}</h1>
+    {portfolioError && (
+      <Alert severity="warning">
+        Your portfolio has not loaded properly. Retrying...
+      </Alert>
+    )}
     <List id="portfolio-container">
       {portfolio.map(stock => (
         <PortfolioEntry

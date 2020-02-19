@@ -16,6 +16,7 @@ export default class extends React.Component {
   }
 
   onClose() {
+    if (this.props.onClose) this.props.onClose()
     this.setState({show: false})
   }
 
@@ -23,7 +24,7 @@ export default class extends React.Component {
     return (
       <Snackbar
         open={this.state.show}
-        autoHideDuration={6000}
+        autoHideDuration={3500}
         onClose={this.onClose.bind(this)}
       >
         <Alert severity="error">{this.props.children}</Alert>

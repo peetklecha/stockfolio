@@ -21,7 +21,7 @@ router.post('/:id/portfolio', checkUser, async (req, res, next) => {
   const qty = +req.body.qty
   if (qty < 0 || !Number.isInteger(qty)) {
     try {
-      res.status(400).send('!!!Please enter a valid quantity.')
+      res.status(400).send('Please enter a valid quantity.')
     } catch (error) {
       next(error)
     }

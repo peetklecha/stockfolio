@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {arrayReplace} from '../utils'
 import {
   GOT_PORTFOLIO,
@@ -6,7 +7,8 @@ import {
   GET_QUOTES_ERROR,
   BOUGHT_STOCK,
   REMOVE_USER,
-  BUY_STOCK_ERROR
+  BUY_STOCK_ERROR,
+  CLEAR_BUY_STOCK_ERROR
 } from './constants'
 
 const defaultPortfolio = {
@@ -20,7 +22,12 @@ const defaultPortfolio = {
 export default function(state = defaultPortfolio, action) {
   switch (action.type) {
     case GOT_PORTFOLIO:
-      return {...state, stocks: action.portfolio, loaded: true}
+      return {
+        ...state,
+        stocks: action.portfolio,
+        loaded: true,
+        portfolioError: false
+      }
     case GOT_QUOTES:
       return {
         ...state,
@@ -38,6 +45,8 @@ export default function(state = defaultPortfolio, action) {
       }
     case BUY_STOCK_ERROR:
       return {...state, buyError: action.error}
+    case CLEAR_BUY_STOCK_ERROR:
+      return {...state, buyError: false}
     case GET_PORTFOLIO_ERROR:
       return {...state, portfolioError: true}
     case GET_QUOTES_ERROR:

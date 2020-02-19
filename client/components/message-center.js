@@ -1,28 +1,31 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import ErrorMessage from './error-message'
+import {clearBuyStockError} from '../store/actions'
 
-export default connect(state => ({
-  portfolioError: state.portfolio.portfolioError,
-  quotesError: state.portfolio.quotesError,
-  buyError: state.portfolio.buyError,
-  transAddError: state.history.addError,
-  transGetError: state.history.getError,
-  userError: state.user.error
-}))(props => {
+export default connect(
+  state => ({
+    portfolioError: state.portfolio.portfolioError,
+    quotesError: state.portfolio.quotesError,
+    buyError: state.portfolio.buyError,
+    transAddError: state.history.addError,
+    transGetError: state.history.getError,
+    userError: state.user.error
+  }),
+  dispatch => ({
+    clearBuyError: () => dispatch(clearBuyStockError())
+  })
+)(props => {
   return (
     <div>
       <ErrorMessage flag={props.portfolioError}>
         There was an error while retrieving your portfolio.
       </ErrorMessage>
       <ErrorMessage flag={props.quotesError}>
-        {console.log(props.quotesError)}
-        {props.quotesError.status && props.quotesError.status === 404
-          ? 'That is not a valid symbol.'
-          : 'There was an error while retrieving your quotes. Information is not up to date.'}
+        There was an error while retrieving your quotes. Information is not up
+        to date.
       </ErrorMessage>
-      <ErrorMessage flag={!!props.buyError}>
-        {console.log(props.buyError)}
+      <ErrorMessage flag={!!props.buyError} onClose={props.clearBuyError}>
         {'There was an error processing your purchase. ' +
           (props.buyError.data || 'Contact us for more information.')}
       </ErrorMessage>

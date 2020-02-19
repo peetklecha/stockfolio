@@ -18,7 +18,11 @@ import {cashHeader} from '../utils'
 export default connect(
   state => ({
     cash: state.user.cash,
-    portfolioLoaded: state.portfolio.loaded
+    portfolioLoaded: state.portfolio.loaded,
+    portfolioError: state.portfolio.portfolioError,
+    quotesError: state.portfolio.quotesError,
+    transAddError: state.history.addError,
+    transGetError: state.history.getError
   }),
   dispatch => ({
     getPortfolio: () => dispatch(getPortfolio()),
@@ -37,6 +41,14 @@ export default connect(
       }
     }
 
+    hasOccurred(prev, prop) {
+      return !prev[prop] && this.props[prop]
+    }
+
+    hasStopped(prev, prop) {
+      return prev[prop] && !this.props[prop]
+    }
+
     componentDidMount() {
       this.props.history.push('/home/portfolio')
       this.props.getPortfolio()
@@ -44,9 +56,18 @@ export default connect(
     }
 
     componentDidUpdate(prevProps) {
-      if (!prevProps.portfolioLoaded && this.props.portfolioLoaded) {
+      if (this.hasOccurred(prevProps, 'portfolioLoaded')) {
         this.props.getQuotes()
         this.setIntervalId = setInterval(() => this.props.getQuotes(), 1000)
+      }
+      if (this.hasOccurred(prevProps, 'portfolioError')) {
+        this.portfolioErrorRetryId = setInterval(
+          () => this.props.getPortfolio(),
+          10000
+        )
+      }
+      if (this.hasStopped(prevProps, 'portfolioError')) {
+        clearInterval(this.portfolioErrorRetryId)
       }
     }
 
